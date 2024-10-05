@@ -1,10 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import numpy as np
 import joblib
 
 # Create the FastAPI app
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins or specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Load the saved linear regression model
 model = joblib.load('linear_regression_model.pkl')
@@ -36,5 +46,3 @@ def predict_profit(input_data: ProfitPredictionInput):
 
     # Return the predicted profit
     return {"Predicted Profit": round(predicted_profit[0], 2)}
-
-
